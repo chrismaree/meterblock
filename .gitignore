@@ -1,10 +1,10 @@
 .idea
 .idea/
-/venv
-*/venv
-*/node_modules/
+**/venv
+**/node_modules/
 /node_modules
 *node_modules*
-*/build
-*/build/
-*build*
+**/build
+**/build
+**/build**
+KraGToken/build/**
