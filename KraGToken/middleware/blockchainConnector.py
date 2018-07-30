@@ -6,27 +6,41 @@ import json
 
 web3 = Web3(HTTPProvider('http://localhost:8545'))
 address = Web3.toChecksumAddress('0x345ca3e014aaf5dca488057592ee47305d9b3e10')
+tokenContract = ''
 
 
-def loadTokenContract(address):
-    with open('abi.json') as f:
-        abi = json.load(f)
-    return web3.eth.contract(abi=abi, address=address,
-                             ContractFactoryClass=ConciseContract)
+def loadTokenContract(address = address):
+    global tokenContract
+    if tokenContract =='':
+        with open('abi.json') as f:
+            abi = json.load(f)
+        tokenContract = web3.eth.contract(abi=abi, address=address,
+                                 ContractFactoryClass=ConciseContract)
+        print("token Contract loaded!")
 
+def getTokenContractAddress():
+    return address
 
+def getNodeAddress():
+    return web3.eth.accounts[0]
 
+def getBalance():
+    return tokenContract.balanceOf(web3.eth.accounts[0])
 
-if __name__ == '__main__':
+def getTotalSupply():
+    return tokenContract.totalSupply()
 
-    tokenContract = loadTokenContract(address)
+def getSymbol():
+    return tokenContract.symbol()
 
-    print(address)
+def getName():
+    return tokenContract.name()
 
-    print(tokenContract.symbol())
+def transfer(address_to, ammount):
+    return tokenContract.transfer(address_to, ammount, transact={'from': web3.eth.accounts[0]})
 
-    print(tokenContract.totalSupply())
+def mintToken(value):
+    return tokenContract.mint(web3.eth.accounts[0], value, transact={'from': web3.eth.accounts[0]})
 
-    print(tokenContract.burn(100, transact={'from': web3.eth.coinbase}))
-
-    print(tokenContract.totalSupply())
+def burnToken(value):
+    return tokenContract.burn(value, transact={'from': web3.eth.accounts[0]})
