@@ -48,8 +48,3 @@ if __name__ == '__main__':
                     print("Light Failed to turn off")
 
             time.sleep(polingDelay)
-
-
-
-
-
