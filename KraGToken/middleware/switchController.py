@@ -11,10 +11,14 @@ def queryPower():
 def PowerOff():
     command = 'Power%20Off'
     response = requests.get(url + command)
-    return (response.json())
+    if response.json()["POWER"] == "OFF":
+        return True
+    return False
 
 
 def PowerOn():
     command = 'Power%20On'
     response = requests.get(url + command)
-    return (response.json())
+    if response.json()["POWER"] == "ON":
+        return True
+    return False
