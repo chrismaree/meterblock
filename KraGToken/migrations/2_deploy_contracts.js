@@ -1,5 +1,5 @@
-var TutorialToken = artifacts.require("TutorialToken");
+var KraGToken = artifacts.require("KraGToken");
 
 module.exports = function(deployer) {
-    deployer.deploy(TutorialToken);
+    deployer.deploy(KraGToken);
 };
