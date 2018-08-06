@@ -7,6 +7,7 @@ import "./Ownable.sol";
 contract MeterManagement is BasicToken, Ownable, StandardToken {
     
     mapping(address=>address) public metersToOwner;
+    mapping(address=>address) public ownerToMeter;
 
     event Burn(address indexed burner, uint256 value);
     event Mint(address indexed to, uint256 amount);
@@ -15,12 +16,27 @@ contract MeterManagement is BasicToken, Ownable, StandardToken {
         require(metersToOwner[msg.sender] != 0);
         _;
     }
+    
+    modifier onlyMeterOwner(address _meterAddress){
+        require(metersToOwner[_meterAddress] == msg.sender);
+        _;
+    }
   
-  function enroleMeter(address _meterAddress, address _clientAddress)
+  function enroleMeter(address _meterAddress, address _ownerAddress)
         onlyOwner
         public
     {
-        metersToOwner[_meterAddress] = _clientAddress;
+        metersToOwner[_meterAddress] = _ownerAddress;
+        ownerToMeter[_ownerAddress] = _meterAddress;
+    }
+    
+    
+    function transferMeterOwnership(address _meterAddress, address _newOwnerAddress)
+        onlyMeterOwner(_meterAddress)
+        public
+    {
+        metersToOwner[_meterAddress] = _newOwnerAddress;
+        ownerToMeter[_newOwnerAddress] = _meterAddress;
     }
   
   /**
