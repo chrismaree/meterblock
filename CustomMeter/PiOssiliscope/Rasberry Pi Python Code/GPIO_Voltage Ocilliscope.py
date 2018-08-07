@@ -28,7 +28,7 @@ secondaryPtp = ptp*scalingFactor
 print("Secondary Peak-to-peak\t" +str(secondaryPtp))
 
 turnsRatio = 25.81
-print("Turns Ratio\t" +str(turnsRatio))
+print("Turns Ratio\t" +str(turnsRatio))	
 
 primaryPtp = secondaryPtp*turnsRatio
 print("Primary Peak-to-peak\t" +str(primaryPtp))
