@@ -1,0 +1,1 @@
+This file is used to connect to and control the voltage and current transformers as well as the relay and contactor used in the custom meter. The API for this scipt is the same as that used in the middleware files such that each section communicates with eachother.
