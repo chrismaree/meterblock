@@ -15,6 +15,12 @@ currentCalibrationFactor = 1.0
 #and the turns ratio of the current transformer
 currentOutputConversion = 20.63661977
 
+def calibrateVoltage(actual,measured):
+    voltageCalibrationFactor = actual/measured
+
+def calibrateCurrent(actual,measured):
+    currentCalibrationFactor = actual/measured
+
 def calcMidPoint(samples):
     return sum(samples) / len(samples)
 

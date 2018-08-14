@@ -16,8 +16,8 @@ samples = lc.takeMaxSpeedSamples(samplesnum)
 data1=lch.calcInstantaniousOutputVoltage(samples[0])
 data2=lch.calcInstantaniousOutputCurrent(samples[1])
 
-print(str(lch.calcOutputRMSOverSamples(data1)) + 'V_RMS')
-print(str(lch.calcOutputRMSOverSamples(data2)) + 'A_RMS')
+print(str(lch.calcOutputRMSOverSamples(data1)) + ' V_RMS')
+print(str(lch.calcOutputRMSOverSamples(data2)) + ' A_RMS')
 
 lc.loadOff()
 
