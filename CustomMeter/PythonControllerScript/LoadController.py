@@ -12,14 +12,14 @@ voltageSensor = MCP3202(channel = 1, differential = False, max_voltage = 5.0)
 currentSensor = MCP3202(channel = 0, differential = False, max_voltage = 5.0)
 
 def takeMaxSpeedSamples(number):
-    values = [[],[]]
+    values = {'voltage':[],'current':[]}
     for x in range(0,number):
-        values[0].append(voltageSensor.value*maxADCVoltage)
-        values[1].append(currentSensor.value*maxADCVoltage)
+        values['voltage'].append(voltageSensor.value*maxADCVoltage)
+        values['current'].append(currentSensor.value*maxADCVoltage)
     return values
 
 def takeDelayedSamples(number,delay):
-    values = [[],[]]
+    values = {'voltage':[],'current':[]}
     for x in range(0,number-1):
         values[0].append(voltageSensor.value*maxADCVoltage)
         values[1].append(currentSensor.value*maxADCVoltage)

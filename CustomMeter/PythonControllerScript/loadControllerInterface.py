@@ -5,10 +5,16 @@ from time import sleep
 
 standardQuerySize = 100
 
+voltageCurrentSamples = []
+
 def queryPower():
+    global voltageCurrentSamples
     samples = lc.takeMaxSpeedSamples(standardQuerySize)
-    voltage = lch.calcInstantaniousOutputVoltage(samples[0])
-    current = lch.calcInstantaniousOutputCurrent(samples[1])
+    
+    voltage = lch.calcInstantaniousOutputVoltage(samples['voltage'])
+    current = lch.calcInstantaniousOutputCurrent(samples['current'])
+    
+    voltageCurrentSamples = {'voltage': voltage, 'current': current}
     
     voltageRMS = lch.calcOutputRMSOverSamples(voltage)
     currentRMS = lch.calcOutputRMSOverSamples(current)
@@ -20,10 +26,8 @@ def powerOff():
 
 def powerOn():
     lc.loadOn()
-    
-powerOn()
-for x in range(0,500):
-    print(queryPower())    
-    sleep(0.1)
 
-powerOff()
+def isConsuming():
+    global voltageCurrentSamples
+    return lch.isConsuming(voltageCurrentSamples)
+    

@@ -54,8 +54,8 @@ def calcPower(voltage, current):
 
 def isConsuming(samples):
     totalPower = 0.0
-    for x in range(0,len(samples)):
-        totalPower+= samples[0][x]*samples[1][x]
+    for x in range(0,len(samples['voltage'])):
+        totalPower += samples['voltage'][x]*samples['current'][x]
     if totalPower>0.0:
         return True
     if totalPower<0.0:
