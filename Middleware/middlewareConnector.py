@@ -1,6 +1,9 @@
+import sys
+sys.path.insert(0,'../CustomMeter/PythonControllerScript')
 import time
 import blockchainConnector as bc
 import switchController as sc
+import loadControllerInterface as lci
 import display
 
 # returns current mWh power consumption/production
@@ -23,7 +26,8 @@ if __name__ == '__main__':
 
         # If meter set up for consumer
         else:
-            powerDraw = sc.queryPower()
+            #powerDraw = sc.queryPower()
+            powerDraw = lci.queryPower()
             endTime = time.time()  # end time of previous consumption period
             if startTime != 0:
                 elapsedTime = endTime - startTime
@@ -41,10 +45,10 @@ if __name__ == '__main__':
 
             # toggle light state based on ballance
             if bc.getBalance() > 0:
-                if sc.PowerOn() == False:
-                    print("Light Failed to turn On")
+                #sc.PowerOn()
+                lci.PowerOn()
             else:
-                if sc.PowerOff() == False:
-                    print("Light Failed to turn off")
+                #sc.PowerOff()
+                lci.PowerOn()
 
             time.sleep(polingDelay)

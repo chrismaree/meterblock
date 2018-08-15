@@ -1,0 +1,1 @@
+This directory stores all the required files to link the blockchain, meter and front end. The so called "Middleware"
