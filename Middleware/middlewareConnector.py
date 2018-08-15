@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0,'../CustomMeter/PythonControllerScript')
 import time
 import blockchainConnector as bc
-#import switchController as sc
+import databaseLogger as dl
 import loadControllerInterface as lci
 import display
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     startTime = 0
     energyConsumed = 0
     bc.loadTokenContract()
-
+    showDisplay = True
     # Infinite loop to poll status of the meter
     while True:
         # If meter set up for producer
@@ -38,8 +38,10 @@ if __name__ == '__main__':
                     bc.burnToken(bc.getBalance())
                 else:
                     bc.burnToken(int(energyConsumed))
-                display.addRow([powerDraw,round(elapsedTime,5),round(energyConsumed,5),bc.getBalance()])
-                display.displayTable()
+                if showDisplay:
+                    display.addRow([powerDraw,round(elapsedTime,5),round(energyConsumed,5),bc.getBalance()])
+                    display.displayTable()
+                dl.createEntry(powerDraw,bc.getBalance,True)
 
             startTime = time.time()
 
