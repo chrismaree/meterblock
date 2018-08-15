@@ -13,7 +13,7 @@ web3Provider = 'http://142.93.131.22:8545'
 
 try:
     web3 = Web3(HTTPProvider(web3Provider))
-    colours.printGreen(f"Connected to RPC blockchain endpoint on: {web3Provider}")
+    colours.printGreen("Connected to RPC blockchain endpoint on: "+web3Provider)
 except:
     colours.printRed("Failed to connect to blockchain...closing")
     sys.exit()

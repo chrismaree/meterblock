@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0,'../CustomMeter/PythonControllerScript')
 import time
 import blockchainConnector as bc
-import switchController as sc
+#import switchController as sc
 import loadControllerInterface as lci
 import display
 

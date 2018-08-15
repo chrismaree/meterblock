@@ -10,11 +10,11 @@ from time import sleep
 lc.loadOn()
 sleep(3)
 
-samplesnum = 1000
+samplesnum = 100
 samples = lc.takeMaxSpeedSamples(samplesnum)
 
-data1=lch.calcInstantaniousOutputVoltage(samples[0])
-data2=lch.calcInstantaniousOutputCurrent(samples[1])
+data1=lch.calcInstantaniousOutputVoltage(samples['voltage'])
+data2=lch.calcInstantaniousOutputCurrent(samples['current'])
 
 print(str(lch.calcOutputRMSOverSamples(data1)) + ' V_RMS')
 print(str(lch.calcOutputRMSOverSamples(data2)) + ' A_RMS')
