@@ -7,6 +7,17 @@ from web3.contract import ConciseContract
 import json
 import colours
 import sys
+import os
+
+
+try:
+    meterID = int(os.environ['METERID'])
+    colours.printGreen("Enviroment Variable included! Using MeterID: " + str(meterID))
+
+except:
+    colours.printRed("Could not find meterID...please set the enviroment var")
+    sys.exit()
+
 
 #web3Provider = 'http://localhost:8545'
 web3Provider = 'http://142.93.131.22:8545'
@@ -39,11 +50,11 @@ def getTokenContractAddress():
 
 
 def getNodeAddress():
-    return web3.eth.accounts[0]
+    return web3.eth.accounts[meterID]
 
 
 def getBalance():
-    return tokenContract.balanceOf(web3.eth.accounts[0])
+    return tokenContract.balanceOf(web3.eth.accounts[meterID])
 
 
 def getTotalSupply():
@@ -59,12 +70,12 @@ def getName():
 
 
 def transfer(address_to, ammount):
-    return tokenContract.transfer(address_to, ammount, transact={'from': web3.eth.accounts[0]})
+    return tokenContract.transfer(address_to, ammount, transact={'from': web3.eth.accounts[meterID]})
 
 
 def mintToken(value):
-    return tokenContract.mint(web3.eth.accounts[0], value, transact={'from': web3.eth.accounts[0]})
+    return tokenContract.mint(web3.eth.accounts[meterID], value, transact={'from': web3.eth.accounts[meterID]})
 
 
 def burnToken(value):
-    return tokenContract.burn(value, transact={'from': web3.eth.accounts[0]})
+    return tokenContract.burn(value, transact={'from': web3.eth.accounts[meterID]})
