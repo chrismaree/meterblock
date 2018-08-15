@@ -15,7 +15,8 @@ contract MeterManagement is BasicToken, Ownable, StandardToken {
     event Mint(address indexed to, uint256 amount); // Mint tokens based on power production to the meters wallet
 
     modifier hasMintPermission() { // Requires that only the meter address can call the mint function based on production
-        require(metersToOwner[msg.sender] != 0);
+        require(metersToOwner[msg.sender] != 0 ||
+        msg.sender == owner);
         _;
     }
     
