@@ -45,10 +45,9 @@ if __name__ == '__main__':
 
             # toggle light state based on ballance
             if bc.getBalance() > 0:
-                #sc.PowerOn()
-                lci.PowerOn()
+                lci.powerOn()
+                
             else:
-                #sc.PowerOff()
-                lci.PowerOn()
+                lci.powerOff()
 
             time.sleep(polingDelay)
