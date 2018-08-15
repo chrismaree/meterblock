@@ -17,7 +17,7 @@ try:
 except:
     colours.printRed("Failed to connect to blockchain...closing")
     sys.exit()
-address = Web3.toChecksumAddress('0x345ca3e014aaf5dca488057592ee47305d9b3e10')
+address = Web3.toChecksumAddress('0xce9479ff82b69bea0b06a9867bc646e4259aa7e8')
 tokenContract = ''
 
 def loadTokenContract(address=address):
