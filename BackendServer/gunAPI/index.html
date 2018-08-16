@@ -10,7 +10,8 @@
         <div id="Output"></div>
         <input type="text" id="Input" placeholder="Enter a message..." autofocus>
     </div>
-        <script src="https://cdn.rawgit.com/amark/gun/master/gun.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js"></script>
+<script src="https://cdn.rawgit.com/amark/gun/master/gun.js"></script>
 <script>
  var gun = Gun("http://localhost:8080/gun");
     gun.get('test').on(function (data, key) {
@@ -18,10 +19,14 @@
     });
 
     document.getElementById("clickMe").onclick = function () {
-        console.log("clicked")
-        gun.get('test').on(function (data, key) {
-            console.log("update:", data);
-        }); 
+        
+        key = $('#Input').val()
+        console.log("getting record for " + key)
+        var meterRecords = gun.get(key)
+        meterRecords.map().once(function (person) {
+            console.log("The record is", person);
+        });
+
          };
 </script>
 </body>
