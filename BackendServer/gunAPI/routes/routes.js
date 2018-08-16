@@ -8,16 +8,8 @@ var appRouter = function (app) {
     });
 app.post("/addEntry", function(req,res){
     console.log(req.body);
-    gun.get('mark').put({
-        name: "Mark",
-        email: "mark@gunDB.io",
-    });
-
-    gun.get('mark').on(function (data, key) {
-        console.log("update:", data);
-    });
-    
-    res.status(200).send("accepted");
+    gun.get(req.body.key).put(req.body.value);    
+    res.status(200).send();
 });
 
 }

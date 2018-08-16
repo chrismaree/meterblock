@@ -3,16 +3,20 @@ var bodyParser = require("body-parser");
 var routes = require("./routes/routes.js");
 var app = express();
 
-var http = require('http')
-var Gun = require('gun')
+var http = require('http');
 
-var gunServer = http.createServer(function (req, res) {
-    if (Gun.serve(req, res)) {
-        return
-    }
+var gunServer = http.createServer();
+
+// Our GUN setup from the last example.
+var Gun = require('gun');
+var gun = Gun({
+    web: gunServer
 });
 
-gunServer.listen(8080)
+// Start the server on port 8080.
+gunServer.listen(8080, function () {
+    console.log('Server listening on http://localhost:8080/gun')
+})
 
 
 app.use(bodyParser.json());

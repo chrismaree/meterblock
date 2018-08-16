@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <input id="clickMe" type="button" value="clickme" onclick="doFunction();" />
 </head>
 
 <body>
@@ -10,39 +10,20 @@
         <div id="Output"></div>
         <input type="text" id="Input" placeholder="Enter a message..." autofocus>
     </div>
-    <script src="http://localhost:8080/gun.js"></script>
-    <script>
-        const gun = Gun('http://localhost:8080' + '/gun');
+        <script src="https://cdn.rawgit.com/amark/gun/master/gun.js"></script>
+<script>
+ var gun = Gun("http://localhost:8080/gun");
+    gun.get('test').on(function (data, key) {
+        console.log("update:", data);
+    });
 
-        const $Input = document.querySelector('#Input');
-        gun.get('test-input').val((data) => {
-            $Input.value = data.value;
-        })
-        $Input.addEventListener('input', e => {
-            const { value } = e.target;
-            gun.get('test-input').put({
-                value
-            });
-        });
-
-        let timestamp = 0;
-        gun.get('test-input').on(function (data, key) {
-            const ts = data._['>'].value;
-            if (timestamp === ts) {
-                return;
-            }
-            timestamp = ts;
+    document.getElementById("clickMe").onclick = function () {
+        console.log("clicked")
+        gun.get('test').on(function (data, key) {
             console.log("update:", data);
-            const $Output = document.querySelector('#Output');
-            $Output.innerHTML = /* @html */`
-          <pre>
-            </code>
-              ${JSON.stringify(data, null, 2)}
-            </code>
-          </pre>
-        `;
-        });
-    </script>
+        }); 
+         };
+</script>
 </body>
 
 </html>
