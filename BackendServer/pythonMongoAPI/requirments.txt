@@ -1,0 +1,11 @@
+Cerberus==1.2
+click==6.7
+Eve==0.8
+Events==0.3
+Flask==1.0.2
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+pymongo==3.7.1
+simplejson==3.16.0
+Werkzeug==0.14.1
