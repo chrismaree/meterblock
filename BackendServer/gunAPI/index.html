@@ -13,19 +13,19 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js"></script>
 <script src="https://cdn.rawgit.com/amark/gun/master/gun.js"></script>
 <script>
- var gun = Gun("http://localhost:8080/gun");
-    gun.get('test').on(function (data, key) {
-        console.log("update:", data);
-    });
+//  var gun = Gun("http://142.93.131.22:8080/gun");
+var gun = Gun("http://127.0.0.1:8080/gun");
+    // gun.get('test').on(function (data, key) {
+    //     console.log("update:", data);
+    // });
 
+    // itterate over the entries in the key and print them
     document.getElementById("clickMe").onclick = function () {
-        
         key = $('#Input').val()
-        console.log("getting record for " + key)
-        var meterRecords = gun.get(key)
-        meterRecords.map().once(function (person) {
-            console.log("The record is", person);
-        });
+        gun.get(key).map().once(function (value, time) {
+            console.log(time)
+            console.log(value)
+        })
 
          };
 </script>
