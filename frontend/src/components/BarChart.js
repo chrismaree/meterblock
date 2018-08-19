@@ -1,11 +1,11 @@
 // LineChart.js
 import {
-    Line,
+    Bar,
     mixins
 } from 'vue-chartjs'
 
 export default {
-    extends: Line,
+    extends: Bar,
     mixins: [mixins.reactiveProp],
     props: ['chartData', 'options'],
     mounted() {
