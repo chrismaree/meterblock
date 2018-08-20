@@ -22,6 +22,9 @@ const store = new Vuex.Store({
     setDefaultEthWallet(state, walletAddress) {
       state.defaultEthWallet = walletAddress
     },
+    setUnlockedAccounts(state, unlockedAccounts) {
+      state.unlockedAccounts = unlockedAccounts
+    },
     setWalletBalance(state, walletBalance) {
       state.walletBalance = walletBalance
     },

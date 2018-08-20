@@ -1,16 +1,16 @@
 <template>
   <div class="Administrator">
-    <Administrator/>
+    <AdministratorTable/>
   </div>
 </template>
 
 <script>
-import Administrator from '@/components/Administrator.vue'
+import AdministratorTable from '@/components/AdministratorTable.vue'
 
 export default {
   name: 'Admin',
   components: {
-    Administrator
+    AdministratorTable,
   }
 }
 </script>

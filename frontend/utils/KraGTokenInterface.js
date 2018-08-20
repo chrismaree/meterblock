@@ -31,11 +31,41 @@ const getSymbol = async () => {
 }
 
 const getTotalSupply = async () => {
-    return await contractInstance.totalSupply()
+    let totalSupply = await contractInstance.totalSupply()
+    return totalSupply['c'][0] //need to do this to deal with big number returned from web3
 }
 
 const getDecimals = async () => {
-    return await contractInstance.decimals()
+    let decimals = await contractInstance.decimals()
+    return decimals['c'][0] //need to do this to deal with big number returned from web3
+}
+
+const getAllMeters = async () => {
+    return await contractInstance.getAllMeters()
+}
+
+const mintTokensTo = async (amount, recipient) => {
+    return await contractInstance.mintTo(amount, recipient, {
+        from: store.state.defaultEthWallet,
+        gasPrice: 2000000000,
+        gas: '2000000'
+    })
+}
+
+const registerMeter = async (meterAddress, ownerAddress) => {
+    return await contractInstance.enroleMeter(meterAddress, ownerAddress, {
+        from: store.state.defaultEthWallet,
+        gasPrice: 2000000000,
+        gas: '2000000'
+    })
+}
+
+const balanceOf = async (address) => {
+    return await contractInstance.balanceOf(address)
+}
+
+const meterOwnerOf = async (address) => {
+    return await contractInstance.meterToOwner(address)
 }
 
 loadKragToken()
@@ -46,5 +76,10 @@ export {
     getName,
     getSymbol,
     getTotalSupply,
-    getDecimals
+    getDecimals,
+    getAllMeters,
+    mintTokensTo,
+    registerMeter,
+    balanceOf,
+    meterOwnerOf
 }
