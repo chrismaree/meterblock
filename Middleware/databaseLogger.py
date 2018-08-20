@@ -1,28 +1,42 @@
-from pymongo import MongoClient
-import blockchainConnector as bc
-import datetime
+import requests
 import colours
 import sys
+import os
+import blockchainConnector as bc
+import time
 
-try:
-    client = MongoClient('mongodb://142.93.131.22:27017/')
-    colours.printGreen("Connected to Mongo Client")
-    db = client['meterBlockReadings']
-except:
-    colours.printRed("Could not Connect the mongodb...closing")
+ip = '10.0.0.206'
+url = f"http://{ip}:3000/"
+
+if(os.system(f"ping -c 1 {ip}  > /dev/null 2>&1")==0):
+    colours.printGreen("Switch online and responding")
+else:
+    colours.printRed("Network error. Cant connect to switch...closing")
     sys.exit()
 
+address = ''
 try:
-    address = bc.getNodeAddress()
-    collection = db[address]
+    address = bc.getNodeAddress
+    colours.printGreen("Retreived Node Address")
 except:
-    colours.printRed("Could not Connect the create collection...closing")
+    colours.printRed("Could Not get node address")
     sys.exit()
+
+def createPost(extension, payload):
+    r = requests.post(url + extension, json=payload)
+    print(r.json())
+    return (r.json())
 
 def createEntry(power, tokens, isConsuming):
-    payload = {"power": power,
+    payload = {
+        "key":address,
+        "value": 
+        {
+            "power": power,
             "tokens": tokens,
-            "isConsuming": isConsuming,
-            "date": datetime.datetime.utcnow()}
-    post_id = collection.insert_one(payload).inserted_id
-    print(post_id)
+            "isConsuming": isConsuming
+        },
+        "time": int(time.time()) 
+    }
+    createPost("addEntry", payload)
+    
