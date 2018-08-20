@@ -19,8 +19,9 @@ except:
     sys.exit()
 
 
-#web3Provider = 'http://localhost:8545'
-web3Provider = 'http://142.93.131.22:8545'
+# web3Provider = 'http://localhost:8545'
+# web3Provider = 'http://142.93.131.22:8545'
+web3Provider = 'http://10.0.0.206:8545'
 
 try:
     web3 = Web3(HTTPProvider(web3Provider))
