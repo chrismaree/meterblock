@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "chart.js": "^2.7.2",
+    "element-theme-chalk": "^2.4.6",
     "element-ui": "^2.4.6",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
