@@ -41,8 +41,8 @@ export default {
     return {
       chartMode: "Hour",
       chartOptions: {
-         responsive: true,
-    maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         segmentShowStroke: true,
         scales: {
           yAxes: [
@@ -50,7 +50,7 @@ export default {
               display: true,
               labelString: "Power(w)",
               ticks: {
-                    autoSkip: false,
+                autoSkip: true,
                 suggestedMin: 0 // minimum will be 0, unless there is a lower value.
               }
             }
@@ -58,7 +58,7 @@ export default {
           xAxes: [
             {
               ticks: {
-                    autoSkip: false,
+                autoSkip: true
               },
               labelString: "time"
             }
@@ -89,38 +89,108 @@ export default {
       this.$data.meterData.lables.push(lables);
       this.$data.meterData.values.push(values);
       this.$data.meterData.tokens.push(tokens);
+    },
+
+    timeConverter(UNIX_timestamp, dataType) {
+      var a = new Date(UNIX_timestamp);
+      var months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ];
+      var year = a.getFullYear();
+      var month = months[a.getMonth()];
+      var date = a.getDate();
+      var hour = a.getHours();
+      var min = a.getMinutes() < 10 ? "0" + a.getMinutes() : a.getMinutes();
+      var sec = a.getSeconds() < 10 ? "0" + a.getSeconds() : a.getSeconds();
+      if (dataType == 'hour') {
+        return (hour + ":" + min + ":" + sec);
+      }
+      if (dataType =='day'){
+      return (month+"/"+date+" " +hour + ":" + min);
+    }
+      if(dataType =='month'){
+        return (date+"/"+month+" " +hour+ ":" + min);
+      }
+      if(dataType =='year'){
+        return (year+"/"+month+"/"+date);
+      }
     }
   },
   computed: {
     datacollection() {
       try {
         let number;
+        let timeStamps = [];
         if (this.chartMode == "Minute") {
           if (this.$data.meterData.lables[0].length > 30) {
             number = 30;
           } else number = number = this.$data.meterData.lables[0].length;
-        }
-        if (this.chartMode == "Hour") {
-          if (this.$data.meterData.lables[0].length > 1800) {
-            number = 1800;
-          } else number = number = this.$data.meterData.lables[0].length;
-        }
-        if (this.chartMode == "Day") {
-          if (this.$data.meterData.lables[0].length > 43200) {
-            number = 43200;
-          } else number = number = this.$data.meterData.lables[0].length;
-        }
-        let timeStamps = [];
+        
         for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
           Math.max(this.$data.meterData.lables[0].length - number, 0)
         )) {
           var date = new Date(unixTimeStamp * 1000);
-          var hours = date.getHours();
-          var minutes = "0" + date.getMinutes();
-          var seconds = "0" + date.getSeconds();
-          var formattedTime =
-            hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
-          timeStamps.push(formattedTime);
+          timeStamps.push(this.timeConverter(date, "hour"));
+        }
+        }
+
+        if (this.chartMode == "Hour") {
+          if (this.$data.meterData.lables[0].length > 1800) {
+            number = 1800;
+          } else number = number = this.$data.meterData.lables[0].length;
+        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+          Math.max(this.$data.meterData.lables[0].length - number, 0)
+        )) {
+          var date = new Date(unixTimeStamp * 1000);
+          timeStamps.push(this.timeConverter(date, "hour"));
+        }
+        }
+
+        if (this.chartMode == "Day") {
+          if (this.$data.meterData.lables[0].length > 43200) {
+            number = 43200;
+          } else number = number = this.$data.meterData.lables[0].length;
+        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+          Math.max(this.$data.meterData.lables[0].length - number, 0)
+        )) {
+          var date = new Date(unixTimeStamp * 1000);
+          timeStamps.push(this.timeConverter(date, "day"));
+        }
+        }
+
+        if (this.chartMode == "Week") {
+          if (this.$data.meterData.lables[0].length > 302400) {
+            number = 302400;
+          } else number = number = this.$data.meterData.lables[0].length;
+        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+          Math.max(this.$data.meterData.lables[0].length - number, 0)
+        )) {
+          var date = new Date(unixTimeStamp * 1000);
+          timeStamps.push(this.timeConverter(date, "month"));
+        }
+        }
+
+        if (this.chartMode == "Month") {
+          if (this.$data.meterData.lables[0].length > 1296000) {
+            number = 1296000;
+          } else number = number = this.$data.meterData.lables[0].length;
+        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+          Math.max(this.$data.meterData.lables[0].length - number, 0)
+        )) {
+          var date = new Date(unixTimeStamp * 1000);
+          timeStamps.push(this.timeConverter(date, "month"));
+        }
         }
 
         return {
