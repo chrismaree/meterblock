@@ -8,20 +8,22 @@ import "./Ownable.sol";
 
 contract MeterManagement is BasicToken, Ownable, StandardToken {
     
-    mapping(address=>address) public metersToOwner; // Map address of meter to the meter owner wallet
-    mapping(address=>address) public ownerToMeter; // Map address of owner wallet to the meter
+    mapping(address=>address) public meterToOwner; // Map address of meter to the meter owner wallet
+    mapping(address=>address[]) public ownerToMeter; // Map address of owner wallet to the meter
+    
+    address[] public meters;
 
     event Burn(address indexed burner, uint256 value); // Burn tokens based on power consumption from the meters wallet
     event Mint(address indexed to, uint256 amount); // Mint tokens based on power production to the meters wallet
 
     modifier hasMintPermission() { // Requires that only the meter address can call the mint function based on production
-        require(metersToOwner[msg.sender] != 0 ||
+        require(meterToOwner[msg.sender] != 0 ||
         msg.sender == owner);
         _;
     }
     
     modifier onlyMeterOwner(address _meterAddress){
-        require(metersToOwner[_meterAddress] == msg.sender);
+        require(meterToOwner[_meterAddress] == msg.sender);
         _;
     }
     // Enrols the meter to a specific owner's adress to allow for transfer of tokens from the owner's account into the meter's wallet
@@ -29,8 +31,9 @@ contract MeterManagement is BasicToken, Ownable, StandardToken {
         onlyOwner
         public
     {
-        metersToOwner[_meterAddress] = _ownerAddress; // Bind meter to owner
-        ownerToMeter[_ownerAddress] = _meterAddress; // Binf owner to meter
+        meterToOwner[_meterAddress] = _ownerAddress; // Bind meter to owner
+        ownerToMeter[_ownerAddress].push(_meterAddress); // Bind owner to meter
+        meters.push(_meterAddress);
     }
     
     // Allows the owner of the meter to transfer ownership of thier meter to a new address
@@ -38,8 +41,8 @@ contract MeterManagement is BasicToken, Ownable, StandardToken {
         onlyMeterOwner(_meterAddress)
         public
     {
-        metersToOwner[_meterAddress] = _newOwnerAddress;
-        ownerToMeter[_newOwnerAddress] = _meterAddress;
+        meterToOwner[_meterAddress] = _newOwnerAddress;
+        ownerToMeter[_newOwnerAddress].push(_meterAddress);
     }
   
   /**
@@ -73,9 +76,40 @@ contract MeterManagement is BasicToken, Ownable, StandardToken {
     {
         totalSupply_ = totalSupply_.add(_amount); // Increases total supply of tokens in circulation during minting event
         balances[msg.sender] = balances[msg.sender].add(_amount); // Increases wallet balance of minting meter upon power production
-        increaseApproval(metersToOwner[msg.sender], _amount); // Approves the increase in meter's balance during minting
+        increaseApproval(meterToOwner[msg.sender], _amount); // Approves the increase in meter's balance during minting
         emit Mint(msg.sender, _amount);
         emit Transfer(address(0), msg.sender, _amount);
         return true;
+    }
+    
+    /**
+   * @dev Function to mint tokens to an address, as an owner
+   * @param _amount of tokens to mint.
+   * @param _recipient address of the minting process
+   * @return A boolean that indicates if the operation was successful.
+   */    
+    function mintTo(uint256 _amount, address _recipient)
+        public
+        onlyOwner
+        returns (bool)
+    {
+        totalSupply_ = totalSupply_.add(_amount); // Increases total supply of tokens in circulation during minting event
+        balances[_recipient] = balances[_recipient].add(_amount); // Increases wallet balance of minting meter upon power production
+        increaseApproval(meterToOwner[_recipient], _amount); // Approves the increase in meter's balance during minting
+        emit Mint(_recipient, _amount);
+        emit Transfer(address(0), _recipient, _amount);
+        return true;
+    }
+    
+    /**
+   * @dev Function to view all registered meters 
+   * @return An array of meters
+   */    
+    function getAllMeters()
+        public
+        view
+        returns (address[])
+    {
+        return meters;
     }
 }
