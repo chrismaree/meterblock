@@ -6,9 +6,9 @@ import blockchainConnector as bc
 import time
 
 ip = '10.0.0.206'
-url = f"http://{ip}:3000/"
+url = "http://"+ip+":3000/"
 
-if(os.system(f"ping -c 1 {ip}  > /dev/null 2>&1")==0):
+if(os.system("ping -c 1 "+ip+" > /dev/null 2>&1")==0):
     colours.printGreen("Switch online and responding")
 else:
     colours.printRed("Network error. Cant connect to switch...closing")
