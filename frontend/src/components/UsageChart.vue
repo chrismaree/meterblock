@@ -1,7 +1,6 @@
 <template>
   <div class="UsageChart">
-    <p>Enter the Meter Public key<p/>
-    <el-row>
+    <el-row type="flex" justify="space-between">
       <el-col :span="10">
         <el-input placeholder="Meter Public key" v-model="meterKey"></el-input>
         </el-col>
@@ -18,18 +17,12 @@
     </el-radio-group>
     </el-col>
     </el-row>
-
-  
-    <br>
-    {{datacollection}}
-    <br>
-    
     <div>
       <br>
     
   </div>
-  <el-card class="box-card" shadow="always" style="width:900px">
-    <Bar :options="chartOptions" :chart-data="datacollection"></Bar>
+  <el-card class="box-card" shadow="always" >
+    <Bar :options="chartOptions" :chart-data="datacollection" style="hight:800px !important"></Bar>
   </el-card>    
   </div>
 </template>
@@ -48,6 +41,8 @@ export default {
     return {
       chartMode: "Hour",
       chartOptions: {
+         responsive: true,
+    maintainAspectRatio: false,
         segmentShowStroke: true,
         scales: {
           yAxes: [

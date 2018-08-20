@@ -1,17 +1,64 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <el-row>
+        <el-col :span="8">
+          <el-button v-if="this.$store.state.isWalletUnlocked" type="success" @click="openEthereumModalSuccess" plain>Wallet Unlocked <i class="el-icon-circle-check"></i></el-button>
+        </el-col>
+        <el-col :span="8">
+          <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> | 
+      <router-link to="/admin">Admin</router-link> | 
       <router-link to="/meterusage">Meter Usage</router-link>
+        </el-col>
+        <el-col :span="8">
+          <el-button v-if="this.$store.state.gunDBNetworkState" type="success" @click="openGunDBModalSuccess" plain>GunDB Connected <i class="el-icon-circle-check"></i></el-button>
+        </el-col>
+      </el-row>
+      
+      
     </div>
     <router-view/>
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    openEthereumModalSuccess() {
+      let message =
+        "<strong>Address: </strong>" +
+        this.$store.state.defaultEthWallet +
+        "<br><strong>Network: </strong>" +
+        this.$store.state.netIdString +
+        "<br><strong>Unlocked: </strong>" +
+        this.$store.state.isWalletUnlocked
+        this.$alert(message, "Ethereum Blockchain Connected Correctly", {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: "OK",
+          type: "Success",
+          center: true
+        });
+    },
+    openGunDBModalSuccess() {
+      let message =
+        "<strong>GunDB Server: </strong>" +
+        this.$store.state.gunDBNetworkAddress
+        this.$alert(message, "GunDB Connected Correctly", {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: "OK",
+          type: "Success",
+          center: true
+        });
+    }
+  }
+};
+</script>
+
+
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

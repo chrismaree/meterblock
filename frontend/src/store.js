@@ -3,16 +3,39 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
-    meterData:[]
+    netIdString: '',
+    walletBalance: '',
+    defaultEthWallet: '',
+    isWalletUnlocked: false,
+    isInjected: false,
+    kraGTokenAddress: "0xc2d4a7b3024479a6b2b50864c04cbb5f52cb8700",
+    gunDBNetworkState: false,
+    gunDBNetworkAddress: 'http://127.0.0.1:8080/gun'
   },
-    getters: {},
-
+  getters: {},
   mutations: {
-    pushToMeterData(state, _meterData){
-      state.meterData.push(_meterData);
+    setNetworkId(state, netIdString) {
+      state.netIdString = netIdString
+    },
+    setDefaultEthWallet(state, walletAddress) {
+      state.defaultEthWallet = walletAddress
+    },
+    setWalletBalance(state, walletBalance) {
+      state.walletBalance = walletBalance
+    },
+    setgunDBNetworkState(state, gunDBNetworkState) {
+      state.gunDBNetworkState = gunDBNetworkState
+    },
+    setisInjected(state, isInjected) {
+      state.isInjected = isInjected
+    },
+    setisWalletUnlocked(state, isWalletUnlocked) {
+      state.isWalletUnlocked = isWalletUnlocked
     }
   },
   actions: {}
 })
+
+export default store

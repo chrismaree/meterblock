@@ -1,3 +1,4 @@
+import locale from 'element-ui/lib/locale/lang/en'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -6,11 +7,31 @@ import ElementUI from 'element-ui'
 import 'element-theme-chalk';
 
 import VueGun from 'vue-gun';
-Vue.use(VueGun, {
-  peers: ['http://127.0.0.1:8080/gun']
-});
+try {
+  Vue.use(VueGun, {
+    peers: [store.state.gunDBNetworkAddress]
+  });
+  console.log("GunDB connected")
+  store.commit('setgunDBNetworkState', true)
+} catch (e) {
+  console.error("error connecting to gundb")
+}
 
-Vue.use(ElementUI)
+
+import {
+  setWalletStatus
+} from '../utils/web3Service.js'
+
+//Set wallet variables from web3 every second(if changed)
+setInterval(function () {
+  (async () => {
+    setWalletStatus()
+  })()
+}, 1000);
+
+Vue.use(ElementUI, {
+  locale
+})
 
 Vue.config.productionTip = false
 
