@@ -75,7 +75,7 @@ def transfer(address_to, ammount):
 
 
 def mintToken(value):
-    return tokenContract.mint(web3.eth.accounts[meterID], value, transact={'from': web3.eth.accounts[meterID]})
+    return tokenContract.mint(value, transact={'from': web3.eth.accounts[meterID]})
 
 
 def burnToken(value):

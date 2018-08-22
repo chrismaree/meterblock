@@ -20,36 +20,31 @@ if __name__ == '__main__':
     showDisplay = True
     # Infinite loop to poll status of the meter
     while True:
-        # If meter set up for producer
-        if isProducer:
-            pass
-
-        # If meter set up for consumer
-        else:
-            #powerDraw = sc.queryPower()
-            powerDraw = lci.queryPower()
-            endTime = time.time()  # end time of previous consumption period
-            if startTime != 0:
-                elapsedTime = endTime - startTime
-                energyConsumed = int(calcEnergy(powerDraw, elapsedTime))
-
+        powerValue = lci.queryPower()
+        isConsuming = lci.isConsuming()
+        endTime = time.time()  # end time of previous consumption period
+        #We dont decrement on the initial sample as this has not end time so the value would be incorrect for
+        #sample duration
+        if startTime != 0:
+            elapsedTime = endTime - startTime
+            energyValue = int(calcEnergy(powerValue, elapsedTime))
+            if (isConsuming):
                 # if the wallet ballance would be set to <0, make the token balance zero else decrement tokens
                 if (bc.getBalance()- energyConsumed <= 0):
                     bc.burnToken(bc.getBalance())
                 else:
-                    bc.burnToken(int(energyConsumed))
-                if showDisplay:
-                    display.addRow([powerDraw,round(elapsedTime,5),round(energyConsumed,5),bc.getBalance()])
-                    display.displayTable()
-                dl.createEntry(powerDraw,bc.getBalance(),True)
-
-            startTime = time.time()
-
-            # toggle light state based on ballance
-            if bc.getBalance() > 0:
-                lci.powerOn()
-                
-            else:
-                lci.powerOff()
-
-            time.sleep(polingDelay)
+                    bc.burnToken(int(energyValue))
+            else: #if the meter is not consuming, it is producing so mint
+                bc.mintToken(int(energyValue))
+            if showDisplay:
+                display.addRow([powerValue,round(elapsedTime,5),round(energyValue,5),bc.getBalance()])
+                display.displayTable()
+            dl.createEntry(powerValue,bc.getBalance(),isConsuming)
+        startTime = time.time()
+        # toggle light state based on ballance
+        if bc.getBalance() > 0:
+            lci.powerOn()
+            
+        else:
+            lci.powerOff()
+        time.sleep(polingDelay)
