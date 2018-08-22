@@ -1,13 +1,7 @@
 <template>
   <div class="UsageChart">
-    <el-row type="flex" justify="space-between">
-      <el-col :span="10">
-        <el-input placeholder="Meter Public key" v-model="meterKey"></el-input>
-        </el-col>
-      <el-col :span="4">
-        <el-button type="submit" @click="findMeter" class="button is-primary is-fullwidth subtitle">Find Meter</el-button>
-        </el-col>
-      <el-col :span="10">
+    <h1>Meter Usage</h1>
+    {{selectedMeter}}
         <el-radio-group v-model="chartMode">
       <el-radio-button label="Minute"></el-radio-button>
       <el-radio-button label="Hour"></el-radio-button>
@@ -15,8 +9,6 @@
       <el-radio-button label="Week"></el-radio-button>
       <el-radio-button label="Month"></el-radio-button>
     </el-radio-group>
-    </el-col>
-    </el-row>
     <div>
       <br>
     
@@ -31,14 +23,22 @@
 import Bar from "./BarChart.js";
 import store from "../store";
 
+import {
+  loadKragToken,
+  getMetersToOwner
+} from "../../utils/KraGTokenInterface";
+
 export default {
   name: "UsageChart",
+  props: {
+    selectedMeter: String
+  },
   components: {
     Bar
   },
-
   data() {
     return {
+      metersToOwner: [],
       chartMode: "Hour",
       chartOptions: {
         responsive: true,
@@ -70,7 +70,6 @@ export default {
         values: [],
         tokens: []
       },
-      meterKey: ""
     };
   },
   methods: {
@@ -79,7 +78,7 @@ export default {
       let values = [];
       let tokens = [];
       this.$gun
-        .get(this.$data.meterKey)
+        .get(this.selectedMeter)
         .map()
         .on(function(value, time) {
           lables.push(time);
@@ -113,17 +112,17 @@ export default {
       var hour = a.getHours();
       var min = a.getMinutes() < 10 ? "0" + a.getMinutes() : a.getMinutes();
       var sec = a.getSeconds() < 10 ? "0" + a.getSeconds() : a.getSeconds();
-      if (dataType == 'hour') {
-        return (hour + ":" + min + ":" + sec);
+      if (dataType == "hour") {
+        return hour + ":" + min + ":" + sec;
       }
-      if (dataType =='day'){
-      return (month+"/"+date+" " +hour + ":" + min);
-    }
-      if(dataType =='month'){
-        return (date+"/"+month+" " +hour+ ":" + min);
+      if (dataType == "day") {
+        return month + "/" + date + " " + hour + ":" + min;
       }
-      if(dataType =='year'){
-        return (year+"/"+month+"/"+date);
+      if (dataType == "month") {
+        return date + "/" + month + " " + hour + ":" + min;
+      }
+      if (dataType == "year") {
+        return year + "/" + month + "/" + date;
       }
     }
   },
@@ -136,68 +135,68 @@ export default {
           if (this.$data.meterData.lables[0].length > 30) {
             number = 30;
           } else number = number = this.$data.meterData.lables[0].length;
-        
-        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-          Math.max(this.$data.meterData.lables[0].length - number, 0)
-        )) {
-          var date = new Date(unixTimeStamp * 1000);
-          timeStamps.push(this.timeConverter(date, "hour"));
-        }
+
+          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "hour"));
+          }
         }
 
         if (this.chartMode == "Hour") {
           if (this.$data.meterData.lables[0].length > 1800) {
             number = 1800;
           } else number = number = this.$data.meterData.lables[0].length;
-        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-          Math.max(this.$data.meterData.lables[0].length - number, 0)
-        )) {
-          var date = new Date(unixTimeStamp * 1000);
-          timeStamps.push(this.timeConverter(date, "hour"));
-        }
+          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "hour"));
+          }
         }
 
         if (this.chartMode == "Day") {
           if (this.$data.meterData.lables[0].length > 43200) {
             number = 43200;
           } else number = number = this.$data.meterData.lables[0].length;
-        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-          Math.max(this.$data.meterData.lables[0].length - number, 0)
-        )) {
-          var date = new Date(unixTimeStamp * 1000);
-          timeStamps.push(this.timeConverter(date, "day"));
-        }
+          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "day"));
+          }
         }
 
         if (this.chartMode == "Week") {
           if (this.$data.meterData.lables[0].length > 302400) {
             number = 302400;
           } else number = number = this.$data.meterData.lables[0].length;
-        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-          Math.max(this.$data.meterData.lables[0].length - number, 0)
-        )) {
-          var date = new Date(unixTimeStamp * 1000);
-          timeStamps.push(this.timeConverter(date, "month"));
-        }
+          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "month"));
+          }
         }
 
         if (this.chartMode == "Month") {
           if (this.$data.meterData.lables[0].length > 1296000) {
             number = 1296000;
           } else number = number = this.$data.meterData.lables[0].length;
-        for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-          Math.max(this.$data.meterData.lables[0].length - number, 0)
-        )) {
-          var date = new Date(unixTimeStamp * 1000);
-          timeStamps.push(this.timeConverter(date, "month"));
-        }
+          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
+            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "month"));
+          }
         }
 
         return {
           labels: timeStamps,
           datasets: [
             {
-              label: this.meterKey + " Power Consumption",
+              label: this.selectedMeter + " Power Consumption",
               data: this.$data.meterData.values[0].slice(
                 Math.max(this.$data.meterData.lables[0].length - number, 0)
               ),
@@ -209,10 +208,10 @@ export default {
           ]
         };
       } catch (e) {
-        console.log(e);
+        console.log(e)
         return null;
       }
     }
-  }
+  },
 };
 </script>

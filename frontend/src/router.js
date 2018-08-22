@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import MeterUsage from './views/MeterUsage.vue'
+import MeterManagement from './views/MeterManagement.vue'
 import Admin from './views/Admin.vue'
 
 Vue.use(Router)
@@ -22,9 +22,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-      path: '/meterusage',
-      name: 'meterusage',
-      component: MeterUsage
+      path: '/metermanagement',
+      name: 'metermanagement',
+      component: MeterManagement
     },
     {
       path: '/admin',

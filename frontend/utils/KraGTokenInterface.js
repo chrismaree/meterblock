@@ -16,6 +16,7 @@ let contractInstance
 
 const loadKragToken = async () => {
     contractInstance = await Contract.at(store.state.kraGTokenAddress)
+    console.log("KragTokenConract Loaded")
 }
 
 const getOwnerAddress = async () => {
@@ -44,16 +45,16 @@ const getAllMeters = async () => {
     return await contractInstance.getAllMeters()
 }
 
-const mintTokensTo = async (amount, recipient) => {
-    return await contractInstance.mintTo(amount, recipient, {
+const mintTokensTo = async (_amount, _recipient) => {
+    return await contractInstance.mintTo(_amount, _recipient, {
         from: store.state.defaultEthWallet,
         gasPrice: 2000000000,
         gas: '2000000'
     })
 }
 
-const registerMeter = async (meterAddress, ownerAddress) => {
-    return await contractInstance.enroleMeter(meterAddress, ownerAddress, {
+const registerMeter = async (_meterAddress, _ownerAddress) => {
+    return await contractInstance.enroleMeter(_meterAddress, _ownerAddress, {
         from: store.state.defaultEthWallet,
         gasPrice: 2000000000,
         gas: '2000000'
@@ -64,8 +65,26 @@ const balanceOf = async (address) => {
     return await contractInstance.balanceOf(address)
 }
 
+const balanceOfCurrentAddress = async () => {
+    return await contractInstance.balanceOf(store.state.defaultEthWallet)
+}
+
 const meterOwnerOf = async (address) => {
     return await contractInstance.meterToOwner(address)
+}
+
+const getMetersToOwner = async () => {
+    console.log(store.state.defaultEthWallet)
+    return await contractInstance.getAllMetersForOwner(store.state.defaultEthWallet)
+}
+
+const transfer = async (_address, _value) => {
+    console.log(_address)
+    return await contractInstance.transfer("0x20e8652108d73044bb765bbb7355a10d10c8ec64", _value, {
+        from: store.state.defaultEthWallet,
+        gasPrice: 2000000000,
+        gas: '2000000'
+    })
 }
 
 loadKragToken()
@@ -81,5 +100,8 @@ export {
     mintTokensTo,
     registerMeter,
     balanceOf,
-    meterOwnerOf
+    balanceOfCurrentAddress,
+    meterOwnerOf,
+    getMetersToOwner,
+    transfer
 }

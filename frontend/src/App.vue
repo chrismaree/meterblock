@@ -10,7 +10,7 @@
           <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> | 
       <router-link to="/admin">Admin</router-link> | 
-      <router-link to="/meterusage">Meter Usage</router-link>
+      <router-link to="/metermanagement">Meter Management</router-link>
         </el-col>
         <el-col :span="8">
           <el-button v-if="this.$store.state.gunDBNetworkState" type="success" @click="openGunDBModalSuccess" plain>GunDB Connected <i class="el-icon-circle-check"></i></el-button>
