@@ -3,12 +3,12 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import MeterManagement from './views/MeterManagement.vue'
 import Admin from './views/Admin.vue'
+import NetworkUtilization from './views/NetworkUtilization.vue'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'home',
       component: Home
@@ -19,7 +19,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import ( /* webpackChunkName: "about" */ './views/About.vue')
     },
     {
       path: '/metermanagement',
@@ -30,6 +30,11 @@ export default new Router({
       path: '/admin',
       name: 'admin',
       component: Admin
+    },
+    {
+      path: '/networkutilization',
+      name: 'networkutilization',
+      component: NetworkUtilization
     }
   ]
 })

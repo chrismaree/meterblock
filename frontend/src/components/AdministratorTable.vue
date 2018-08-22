@@ -24,11 +24,14 @@
   <el-row>
     <el-col :span="24">
   <el-form-item label="Mint new Tokens">
-    <el-select filterable v-model="formInline.mintAddress" placeholder="Select address to mint">
-      <div v-for="meter in allMeters">
-        <el-option :label="meter" :value="meter"></el-option>
-      </div>      
-    </el-select>
+
+  <el-autocomplete
+    class="inline-input"
+    v-model="formInline.mintAddress"
+    :fetch-suggestions="querySearch"
+    placeholder="Please Input">
+    </el-autocomplete>
+<i class="el-icon-arrow-right" style="padding-top:12px"></i>
   </el-form-item>
   <el-form-item label="Tokens(kWh)">
     <el-input v-model="formInline.tokens" type="number" min=0 :step="1"></el-input>
@@ -42,11 +45,12 @@
   <el-row>
     <el-col :span="24">
   <el-form-item label="Token Balance">
-    <el-select filterable v-model="formInline.viewAddress" placeholder="Select address to mint">
-      <div v-for="meter in allMeters">
-        <el-option :label="meter" :value="meter"></el-option>
-      </div>      
-    </el-select>
+    <el-autocomplete
+        class="inline-input"
+        v-model="formInline.viewAddress"
+        :fetch-suggestions="querySearch"
+        placeholder="Please Input"
+        ></el-autocomplete>
   </el-form-item>
   <el-form-item>
     <el-button @click="viewBalance" type="primary">View</el-button>
@@ -105,7 +109,7 @@ export default {
     return {
       meterBalance: 0,
       meterOwner: "",
-      allMeters: [],
+      allMeterAddresses: [],
       formInline: {
         registrerMeterAddress: "",
         registrerOwnerAddress: "",
@@ -138,7 +142,11 @@ export default {
     },
 
     async loadAllMeters() {
-      this.allMeters = await getAllMeters();
+      let addresses = await loadKragToken();
+      let allAddresses = await getAllMeters();
+      for (let i = 0; i < allAddresses.length; i++) {
+        this.allMeterAddresses.push({ value: allAddresses[i] });
+      }
     },
 
     async mintTokens() {
@@ -158,6 +166,21 @@ export default {
     async viewBalance() {
       this.meterBalance = await balanceOf(this.formInline.viewAddress);
       this.meterOwner = await meterOwnerOf(this.formInline.viewAddress);
+    },
+    querySearch(queryString, cb) {
+      var links = this.allMeterAddresses;
+      var results = queryString
+        ? links.filter(this.createFilter(queryString))
+        : links;
+      // call callback function to return suggestion objects
+      cb(results);
+    },
+    createFilter(queryString) {
+      return link => {
+        return (
+          link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
     }
   },
   async created() {
