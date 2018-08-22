@@ -1,6 +1,5 @@
 <template>
   <div class="NetworkUtilization">
-      HERE
     <ViewAllMeters/>
   </div>
 </template>

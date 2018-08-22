@@ -1,7 +1,8 @@
 <template>
   <div class="UsageChart">
-    <h1>Meter Usage</h1>
-    {{selectedMeter}}
+    <h1>Meter Usage</h1>  
+    <el-button @click="findMeter" type="primary">Find Meter</el-button>
+
         <el-radio-group v-model="chartMode">
       <el-radio-button label="Minute"></el-radio-button>
       <el-radio-button label="Hour"></el-radio-button>
@@ -77,14 +78,17 @@ export default {
       let lables = [];
       let values = [];
       let tokens = [];
+      console.log(this.selectedMeter)
       this.$gun
         .get(this.selectedMeter)
         .map()
         .on(function(value, time) {
+          console.log(time)
           lables.push(time);
           values.push(value.power);
           tokens.push(value.tokens);
         });
+      console.log(lables)
       this.$data.meterData.lables.push(lables);
       this.$data.meterData.values.push(values);
       this.$data.meterData.tokens.push(tokens);

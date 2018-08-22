@@ -3,21 +3,26 @@
     <h1>All Meters Graphs</h1>
 
          <div class="sub-title">Select Meters to add</div>
-        <el-autocomplete
-        class="inline-input"
-        v-model="inputMeter"
-        :fetch-suggestions="querySearch"
-        placeholder="Please Input"
-        @select="handleSelect"
-        ></el-autocomplete>
         
-        <el-select filterable v-model="formInline.viewAddress" placeholder="Select address to mint">
+        <el-select filterable v-model="inputMeter" placeholder="Select address to mint">
             <div v-for="meter in allMeterAddresses">
                 <el-option :label="meter" :value="meter"></el-option>
             </div>      
         </el-select>
         <el-button @click="handleSelect" type="primary">Add</el-button>
-        <br><br>
+        <br>
+        <el-tag
+            v-for="tag in tags"
+            :key="tag.name"
+            closable
+            :type="tag.type"
+              @close="handleClose(tag)">
+            {{tag.name}}
+        </el-tag>
+        <br>
+        {{meterData}}
+        
+        <br>
         <el-radio-group v-model="chartMode">
         <el-radio-button label="Minute"></el-radio-button>
         <el-radio-button label="Hour"></el-radio-button>
@@ -39,36 +44,62 @@ export default {
   data() {
     return {
       allMeterAddresses: [],
+      tags: [],
       inputMeter: "",
-      chartMode: "Hour"
+      chartMode: "Hour",
+      selectedMeters: [],
+      tagTypes: ["", "success", "info", "warning", "danger"],
+      meterData: {}
     };
   },
   async created() {
-    this.allMeterAddresses = await loadKragToken();
-    let allAddresses = await getAllMeters();
-    for (let i = 0; i < allAddresses.length; i++) {
-      this.allMeterAddresses.push({ value: allAddresses[i] });
-    }
+    await loadKragToken();
+    this.allMeterAddresses = await getAllMeters();
   },
   methods: {
-    addMeter() {},
+    async addMeter(_meterAddress) {
+      console.log(_meterAddress);
+      let lables = [];
+      let values = [];
+      let tokens = [];
+      await this.$gun
+        .get(_meterAddress)
+        .map()
+        .on(function(value, time) {
+          lables.push(time);
+          values.push(value.power);
+          tokens.push(value.tokens);
+        });
+      if (this.$data.meterData[_meterAddress] == undefined) {
+        this.$data.meterData[_meterAddress] = {
+          lables: [],
+          values: [],
+          tokens: []
+        };
+      }
+      this.$data.meterData[_meterAddress].lables.push(lables);
+      this.$data.meterData[_meterAddress].values.push(values);
+      this.$data.meterData[_meterAddress].tokens.push(tokens);
+    },
+    handleClose(tag) {
+      this.tags.splice(this.tags.indexOf(tag), 1);
+      this.selectedMeters.splice(this.tags.indexOf(tag), 1);
+      this.inputMeter = "";
+    },
     handleSelect() {
-      console.log("item");
-    },
-    querySearch(queryString, cb) {
-      var links = this.allMeterAddresses;
-      var results = queryString
-        ? links.filter(this.createFilter(queryString))
-        : links;
-      // call callback function to return suggestion objects
-      cb(results);
-    },
-    createFilter(queryString) {
-      return link => {
-        return (
-          link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        );
-      };
+      if (
+        this.selectedMeters.includes(this.inputMeter) ||
+        this.inputMeter == ""
+      ) {
+        console.log("Address already added");
+      } else {
+        this.selectedMeters.push(this.inputMeter);
+        this.tags.push({
+          name: this.inputMeter,
+          type: this.tagTypes[this.selectedMeters.length - 1]
+        });
+        this.addMeter(this.inputMeter);
+      }
     }
   },
 
@@ -163,6 +194,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
 h3 {
   margin: 40px 0 0;
 }

@@ -39,7 +39,7 @@ if __name__ == '__main__':
             if showDisplay:
                 display.addRow([powerValue,round(elapsedTime,5),round(energyValue,5),bc.getBalance()])
                 display.displayTable()
-            dl.createEntry(powerValue,bc.getBalance(),isConsuming)
+            dl.createEntry(powerValue, bc.getBalance(), isConsuming)
         startTime = time.time()
         # toggle light state based on ballance
         if bc.getBalance() > 0:
