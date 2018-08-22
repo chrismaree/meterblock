@@ -112,4 +112,16 @@ contract MeterManagement is BasicToken, Ownable, StandardToken {
     {
         return meters;
     }
+    
+    /**
+   * @dev Function to view all registered meters for a particular owner
+   * @return An array of meters
+   */    
+    function getAllMetersForOwner(address _owner)
+        public
+        view
+        returns (address[])
+    {
+        return ownerToMeter[_owner];
+    }
 }
