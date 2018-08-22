@@ -87,6 +87,15 @@ const transfer = async (_address, _value) => {
     })
 }
 
+//withdraw will always occure from the meter(spesifed from the from) to the unlocked account
+const withdrawFromMeter = async (_from, _value) => {
+    return await contractInstance.transferFrom(_from, store.state.defaultEthWallet, _value, {
+        from: store.state.defaultEthWallet,
+        gasPrice: 2000000000,
+        gas: '2000000'
+    })
+}
+
 loadKragToken()
 
 export {
@@ -103,5 +112,6 @@ export {
     balanceOfCurrentAddress,
     meterOwnerOf,
     getMetersToOwner,
-    transfer
+    transfer,
+    withdrawFromMeter
 }

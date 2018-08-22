@@ -15,18 +15,16 @@
   </el-col>
   <el-col :span="12">
       <div v-if="selectedMeter!=''">
-      <p>The selected Meter has {{meterBalance/100000}} KraG Tokens. Transfer tokens from meter to account</p>
-      {{selectedMeter}}
-    <el-button type="primary" :disabled="meterBalance==0">Withdraw</el-button>
+      <p>The selected Meter has {{meterBalance/100000}} KraG Tokens. </p>
+          Transfer tokens from meter to account
+      <el-input v-model="withDrawValue" type="number" min=0 :step="1"></el-input>
+    <el-button type="primary" @click="withdrawTokensFromMeter" :disabled="meterBalance==0">Withdraw</el-button>
     </div>
     <div v-if="selectedMeter==''">
         Please select a meter to view it's balance
     </div>
   </el-col>
 </el-row>
-
-    
-    
   </div>
 </template>
 
@@ -35,7 +33,8 @@ import {
   loadKragToken,
   balanceOfCurrentAddress,
   balanceOf,
-  transfer
+  transfer,
+  withdrawFromMeter
 } from "../../utils/KraGTokenInterface";
 
 export default {
@@ -54,11 +53,11 @@ export default {
   methods: {
     async loadTokensToMeter() {
       console.log(this.selectedMeter);
-      await transfer(this.selectedMeter, this.loadValue);
+      await transfer(this.selectedMeter, this.loadValue*100000);
     },
 
     async withdrawTokensFromMeter() {
-
+        await withdrawFromMeter(this.selectedMeter, this.withDrawValue*100000)
     },
   },
   async mounted() {
