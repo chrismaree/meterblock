@@ -31,7 +31,7 @@ if __name__ == '__main__':
             endTime = time.time()  # end time of previous consumption period
             if startTime != 0:
                 elapsedTime = endTime - startTime
-                energyConsumed = calcEnergy(powerDraw, elapsedTime)
+                energyConsumed = int(calcEnergy(powerDraw, elapsedTime))
 
                 # if the wallet ballance would be set to <0, make the token balance zero else decrement tokens
                 if (bc.getBalance()- energyConsumed <= 0):
@@ -41,7 +41,7 @@ if __name__ == '__main__':
                 if showDisplay:
                     display.addRow([powerDraw,round(elapsedTime,5),round(energyConsumed,5),bc.getBalance()])
                     display.displayTable()
-                dl.createEntry(powerDraw,bc.getBalance,True)
+                dl.createEntry(powerDraw,bc.getBalance(),True)
 
             startTime = time.time()
 
