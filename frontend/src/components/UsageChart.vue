@@ -74,16 +74,15 @@ export default {
     };
   },
   methods: {
-    findMeter() {
+    async findMeter() {
       let lables = [];
       let values = [];
       let tokens = [];
       console.log(this.selectedMeter)
-      this.$gun
+      await this.$gun
         .get(this.selectedMeter)
         .map()
         .on(function(value, time) {
-          console.log(time)
           lables.push(time);
           values.push(value.power);
           tokens.push(value.tokens);

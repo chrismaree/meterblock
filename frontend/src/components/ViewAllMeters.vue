@@ -60,7 +60,20 @@ export default {
       chartMode: "Hour",
       selectedMeters: [],
       tagTypes: ["", "success", "info", "warning", "danger"],
-      backgroundColors: ["blue", "green", "red"],
+      backgroundColors: [
+        "rgba(64, 158, 255,0.2)",
+        "rgba(103, 194, 58,0.2)",
+        "rgba(144, 147, 153,0.2)",
+        "rgba(230, 162, 60,0.2)",
+        "rgba(245, 108, 108,0.2)"
+      ],
+      borderColors: [
+        "rgba(64, 158, 255,1)",
+        "rgba(103, 194, 58,1)",
+        "rgba(144, 147, 153,1)",
+        "rgba(230, 162, 60,1)",
+        "rgba(245, 108, 108,1)"
+      ],
       meterData: {},
       chartOptions: {
         responsive: true,
@@ -88,7 +101,8 @@ export default {
             }
           ]
         }
-      }
+      },
+      test: 17
     };
   },
   async created() {
@@ -96,19 +110,22 @@ export default {
     this.allMeterAddresses = await getAllMeters();
   },
   methods: {
-    async addMeter(_meterAddress) {
+    addMeter(_meterAddress) {
+      console.log("NEW");
       console.log(_meterAddress);
       let lables = [];
       let values = [];
       let tokens = [];
-      await this.$gun
+      this.$gun
         .get(_meterAddress)
         .map()
         .on(function(value, time) {
+          console.log("GUN" + this.$data.test);
           lables.push(time);
           values.push(value.power);
           tokens.push(value.tokens);
-        });
+        }).bind(this)
+        ;
       if (this.$data.meterData[_meterAddress] == undefined) {
         this.$data.meterData[_meterAddress] = {
           lables: [],
@@ -119,6 +136,7 @@ export default {
       this.$data.meterData[_meterAddress].lables.push(lables);
       this.$data.meterData[_meterAddress].values.push(values);
       this.$data.meterData[_meterAddress].tokens.push(tokens);
+      console.log("UDATE");
     },
     handleClose(tag) {
       delete this.meterData[tag.name];
@@ -180,6 +198,8 @@ export default {
 
   computed: {
     datacollection() {
+      if (this.meterData == undefined) {
+      }
       try {
         let number = 30;
         let timeStamps = [];
@@ -190,9 +210,8 @@ export default {
           ) {
             number = 30;
           } else
-            number = this.$data.meterData[
-              Object.keys(this.$data.meterData)[0]
-            ].lables[0].length;
+            number = this.$data.meterData[Object.keys(this.$data.meterData)[0]]
+              .lables[0].length;
 
           for (let unixTimeStamp of this.$data.meterData[
             Object.keys(this.$data.meterData)[0]
@@ -267,11 +286,13 @@ export default {
             data: this.meterData[keys[i]].values[0].slice(
               Math.max(this.meterData[keys[i]].values[0].length - number, 0)
             ),
-            backgroundColor: this.backgroundColors[i]
+            backgroundColor: this.backgroundColors[i],
+            borderColor: this.borderColors[i],
+            borderWidth: 2
           });
         }
-        console.log("DATA")
-        console.log(dataValues)
+        console.log("DATA");
+        console.log(dataValues);
         return dataValues;
 
         return "a";
