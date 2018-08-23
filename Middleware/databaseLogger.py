@@ -30,14 +30,13 @@ except:
 def createPost(extension, payload):
     r = requests.post(url + extension, json=payload)
 
-def createEntry(power, tokens, isConsuming):
+def createEntry(power, tokens):
     payload = {
-        "key":address,
+        "key":address.lower(),
         "value": 
         {
             "power": power,
             "tokens": tokens,
-            "isConsuming": isConsuming
         },
         "time": int(time.time()) 
     }
