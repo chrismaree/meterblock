@@ -32,7 +32,7 @@ def createPost(extension, payload):
 
 def createEntry(power, tokens, isConsuming):
     payload = {
-        "key":address,
+        "key":address.lower(),
         "value": 
         {
             "power": power,
