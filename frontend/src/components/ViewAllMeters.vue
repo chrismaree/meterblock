@@ -20,7 +20,7 @@
             {{tag.name}}
         </el-tag>
         <br>
-        {{meterData}}
+        <!-- {{meterData}} -->
         <br>
         <br>
         <!-- {{datacollection}} -->
