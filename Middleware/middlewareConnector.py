@@ -20,13 +20,13 @@ if __name__ == '__main__':
     showDisplay = True
     # Infinite loop to poll status of the meter
     while True:
-        powerValue = lci.queryPower()
-        isConsuming = lci.isConsuming()
         endTime = time.time()  # end time of previous consumption period
         #We dont decrement on the initial sample as this has not end time so the value would be incorrect for
         #sample duration
         if startTime != 0:
             elapsedTime = endTime - startTime
+            powerValue = lci.queryPower()
+            isConsuming = lci.isConsuming()
             energyValue = int(calcEnergy(powerValue, elapsedTime))
             if (isConsuming):
                 # if the wallet ballance would be set to <0, make the token balance zero else decrement tokens

@@ -1,7 +1,8 @@
 <template>
   <div class="UsageChart">
-    <h1>Meter Usage</h1>
-    {{selectedMeter}}
+    <h1>Meter Usage</h1>  
+    <el-button @click="findMeter" type="primary">Find Meter</el-button>
+
         <el-radio-group v-model="chartMode">
       <el-radio-button label="Minute"></el-radio-button>
       <el-radio-button label="Hour"></el-radio-button>
@@ -73,21 +74,15 @@ export default {
     };
   },
   methods: {
-    findMeter() {
-      let lables = [];
-      let values = [];
-      let tokens = [];
-      this.$gun
+    async findMeter() {
+      await this.$gun
         .get(this.selectedMeter)
         .map()
-        .on(function(value, time) {
-          lables.push(time);
-          values.push(value.power);
-          tokens.push(value.tokens);
+        .on((value, time) => {
+          this.$data.meterData.lables.push(time);
+          this.$data.meterData.values.push(value.power);
+          this.$data.meterData.tokens.push(value.tokens);
         });
-      this.$data.meterData.lables.push(lables);
-      this.$data.meterData.values.push(values);
-      this.$data.meterData.tokens.push(tokens);
     },
 
     timeConverter(UNIX_timestamp, dataType) {
@@ -132,12 +127,12 @@ export default {
         let number;
         let timeStamps = [];
         if (this.chartMode == "Minute") {
-          if (this.$data.meterData.lables[0].length > 30) {
+          if (this.$data.meterData.lables.length > 30) {
             number = 30;
-          } else number = number = this.$data.meterData.lables[0].length;
+          } else number = number = this.$data.meterData.lables.length;
 
-          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          for (let unixTimeStamp of this.$data.meterData.lables.slice(
+            Math.max(this.$data.meterData.lables.length - number, 0)
           )) {
             var date = new Date(unixTimeStamp * 1000);
             timeStamps.push(this.timeConverter(date, "hour"));
@@ -145,11 +140,11 @@ export default {
         }
 
         if (this.chartMode == "Hour") {
-          if (this.$data.meterData.lables[0].length > 1800) {
+          if (this.$data.meterData.lables.length > 1800) {
             number = 1800;
-          } else number = number = this.$data.meterData.lables[0].length;
-          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          } else number = number = this.$data.meterData.lables.length;
+          for (let unixTimeStamp of this.$data.meterData.lables.slice(
+            Math.max(this.$data.meterData.lables.length - number, 0)
           )) {
             var date = new Date(unixTimeStamp * 1000);
             timeStamps.push(this.timeConverter(date, "hour"));
@@ -157,11 +152,11 @@ export default {
         }
 
         if (this.chartMode == "Day") {
-          if (this.$data.meterData.lables[0].length > 43200) {
+          if (this.$data.meterData.lables.length > 43200) {
             number = 43200;
-          } else number = number = this.$data.meterData.lables[0].length;
-          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          } else number = number = this.$data.meterData.lables.length;
+          for (let unixTimeStamp of this.$data.meterData.lables.slice(
+            Math.max(this.$data.meterData.lables.length - number, 0)
           )) {
             var date = new Date(unixTimeStamp * 1000);
             timeStamps.push(this.timeConverter(date, "day"));
@@ -169,11 +164,11 @@ export default {
         }
 
         if (this.chartMode == "Week") {
-          if (this.$data.meterData.lables[0].length > 302400) {
+          if (this.$data.meterData.lables.length > 302400) {
             number = 302400;
-          } else number = number = this.$data.meterData.lables[0].length;
-          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          } else number = number = this.$data.meterData.lables.length;
+          for (let unixTimeStamp of this.$data.meterData.lables.slice(
+            Math.max(this.$data.meterData.lables.length - number, 0)
           )) {
             var date = new Date(unixTimeStamp * 1000);
             timeStamps.push(this.timeConverter(date, "month"));
@@ -181,11 +176,11 @@ export default {
         }
 
         if (this.chartMode == "Month") {
-          if (this.$data.meterData.lables[0].length > 1296000) {
+          if (this.$data.meterData.lables.length > 1296000) {
             number = 1296000;
-          } else number = number = this.$data.meterData.lables[0].length;
-          for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-            Math.max(this.$data.meterData.lables[0].length - number, 0)
+          } else number = number = this.$data.meterData.lables.length;
+          for (let unixTimeStamp of this.$data.meterData.lables.slice(
+            Math.max(this.$data.meterData.lables.length - number, 0)
           )) {
             var date = new Date(unixTimeStamp * 1000);
             timeStamps.push(this.timeConverter(date, "month"));
@@ -197,21 +192,20 @@ export default {
           datasets: [
             {
               label: this.selectedMeter + " Power Consumption",
-              data: this.$data.meterData.values[0].slice(
-                Math.max(this.$data.meterData.lables[0].length - number, 0)
+              data: this.$data.meterData.values.slice(
+                Math.max(this.$data.meterData.lables.length - number, 0)
               ),
-              backgroundColor: Array.apply(null, Array(number)).map(
-                String.prototype.valueOf,
-                "#7ea9d6"
-              )
+              backgroundColor: "rgba(64, 158, 255,0.2)",
+              borderColor: "rgba(64, 158, 255,1)",
+              borderWidth: 2
             }
           ]
         };
       } catch (e) {
-        console.log(e)
+        console.log(e);
         return null;
       }
     }
-  },
+  }
 };
 </script>
