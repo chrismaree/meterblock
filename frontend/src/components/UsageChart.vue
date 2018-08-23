@@ -11,9 +11,10 @@
       <el-radio-button label="Month"></el-radio-button>
     </el-radio-group>
     <div>
-      <br>
-    
+      <br>  
   </div>
+
+{{meterData}}
   <el-card class="box-card" shadow="always" >
     <Bar :options="chartOptions" :chart-data="datacollection" style="hight:800px !important"></Bar>
   </el-card>    
@@ -52,7 +53,8 @@ export default {
               labelString: "Power(w)",
               ticks: {
                 autoSkip: true,
-                suggestedMin: 0 // minimum will be 0, unless there is a lower value.
+                suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+                suggestedMax: 0
               }
             }
           ],
@@ -70,7 +72,7 @@ export default {
         lables: [],
         values: [],
         tokens: []
-      },
+      }
     };
   },
   methods: {
@@ -79,6 +81,7 @@ export default {
         .get(this.selectedMeter)
         .map()
         .on((value, time) => {
+          console.log(this.selectedMeter)
           this.$data.meterData.lables.push(time);
           this.$data.meterData.values.push(value.power);
           this.$data.meterData.tokens.push(value.tokens);

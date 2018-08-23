@@ -20,7 +20,7 @@
             {{tag.name}}
         </el-tag>
         <br>
-        <!-- {{meterData}} -->
+        {{meterData}}
         <br>
         <br>
         <!-- {{datacollection}} -->
@@ -91,7 +91,8 @@ export default {
               labelString: "Power(w)",
               ticks: {
                 autoSkip: true,
-                suggestedMin: 0 // minimum will be 0, unless there is a lower value.
+                suggestedMin: 0,
+                suggestedMax: 0
               }
             }
           ],
@@ -120,10 +121,12 @@ export default {
       let lables = [];
       let values = [];
       let tokens = [];
+      this.$gun.get(_meterAddress).put(null)
       this.$gun
         .get(_meterAddress)
         .map()
         .on((value, time) => {
+          console.log(value +time)
           this.count = this.count + 1;
           if (this.meterData[_meterAddress] == undefined) {
             this.meterData[_meterAddress] = {
@@ -132,7 +135,7 @@ export default {
               tokens: []
             };
           }
-          this.meterData[_meterAddress].lables.push(time);
+          this.meterData[_meterAddress].lables.push(time.substring(time.lastIndexOf("/") + 1));
           this.meterData[_meterAddress].values.push(value.power);
           this.meterData[_meterAddress].tokens.push(value.tokens);
         });
