@@ -20,22 +20,26 @@
             {{tag.name}}
         </el-tag>
         <br>
-        {{meterData}}
+        <!-- {{meterData}} -->
         <br>
         <br>
-        {{datacollection}}
+        <!-- {{datacollection}} -->
+        <br>
+        <br>
+    
+        <!-- {{meterData[Object.keys(this.meterData)[0]]}} -->
         
         <br>
         <el-radio-group v-model="chartMode">
         <el-radio-button label="Minute"></el-radio-button>
         <el-radio-button label="Hour"></el-radio-button>
         <el-radio-button label="Day"></el-radio-button>
-        <el-radio-button label="Week"></el-radio-button>
-        <el-radio-button label="Month"></el-radio-button>
     </el-radio-group>
 <br>
 <el-card class="box-card" shadow="always" >
-    <Bar :options="chartOptions" :chart-data="datacollection" style="hight:800px !important"></Bar>
+    <div v-if="count != 0">
+        <Bar :options="chartOptions" :chart-data="datacollection" style="hight:800px !important"></Bar>
+    </div>
   </el-card>
 
   </div>
@@ -102,7 +106,7 @@ export default {
           ]
         }
       },
-      test: 17
+      count: 0
     };
   },
   async created() {
@@ -119,29 +123,29 @@ export default {
       this.$gun
         .get(_meterAddress)
         .map()
-        .on(function(value, time) {
-          console.log("GUN" + this.$data.test);
-          lables.push(time);
-          values.push(value.power);
-          tokens.push(value.tokens);
-        }).bind(this)
-        ;
-      if (this.$data.meterData[_meterAddress] == undefined) {
-        this.$data.meterData[_meterAddress] = {
-          lables: [],
-          values: [],
-          tokens: []
-        };
-      }
-      this.$data.meterData[_meterAddress].lables.push(lables);
-      this.$data.meterData[_meterAddress].values.push(values);
-      this.$data.meterData[_meterAddress].tokens.push(tokens);
+        .on((value, time) => {
+          this.count = this.count + 1;
+          if (this.meterData[_meterAddress] == undefined) {
+            this.meterData[_meterAddress] = {
+              lables: [],
+              values: [],
+              tokens: []
+            };
+          }
+          this.meterData[_meterAddress].lables.push(time);
+          this.meterData[_meterAddress].values.push(value.power);
+          this.meterData[_meterAddress].tokens.push(value.tokens);
+        });
       console.log("UDATE");
     },
     handleClose(tag) {
       delete this.meterData[tag.name];
       this.tags.splice(this.tags.indexOf(tag), 1);
       this.selectedMeters.splice(this.tags.indexOf(tag), 1);
+      this.count = this.count - 1;
+      if (this.tags.length == 0) {
+        this.count = 0;
+      }
     },
     handleSelect() {
       if (
@@ -198,27 +202,25 @@ export default {
 
   computed: {
     datacollection() {
-      if (this.meterData == undefined) {
-      }
+      this.count;
       try {
         let number = 30;
         let timeStamps = [];
         if (this.chartMode == "Minute") {
           if (
-            this.$data.meterData[Object.keys(this.$data.meterData)[0]].lables[0]
-              .length > 30
+            this.meterData[Object.keys(this.meterData)[0]].lables.length > 30
           ) {
             number = 30;
           } else
-            number = this.$data.meterData[Object.keys(this.$data.meterData)[0]]
-              .lables[0].length;
+            number = this.meterData[Object.keys(this.meterData)[0]].lables
+              .length;
 
-          for (let unixTimeStamp of this.$data.meterData[
-            Object.keys(this.$data.meterData)[0]
-          ].lables[0].slice(
+          for (let unixTimeStamp of this.meterData[
+            Object.keys(this.meterData)[0]
+          ].lables.slice(
             Math.max(
-              this.$data.meterData[Object.keys(this.$data.meterData)[0]]
-                .lables[0].length - number,
+              this.meterData[Object.keys(this.meterData)[0]].lables.length -
+                number,
               0
             )
           )) {
@@ -226,65 +228,63 @@ export default {
             timeStamps.push(this.timeConverter(date, "hour"));
           }
         }
-        // console.log(timeStamps);
-        // if (this.chartMode == "Hour") {
-        //   if (this.$data.meterData.lables[0].length > 1800) {
-        //     number = 1800;
-        //   } else number = number = this.$data.meterData.lables[0].length;
-        //   for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-        //     Math.max(this.$data.meterData.lables[0].length - number, 0)
-        //   )) {
-        //     var date = new Date(unixTimeStamp * 1000);
-        //     timeStamps.push(this.timeConverter(date, "hour"));
-        //   }
-        // }
 
-        // if (this.chartMode == "Day") {
-        //   if (this.$data.meterData.lables[0].length > 43200) {
-        //     number = 43200;
-        //   } else number = number = this.$data.meterData.lables[0].length;
-        //   for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-        //     Math.max(this.$data.meterData.lables[0].length - number, 0)
-        //   )) {
-        //     var date = new Date(unixTimeStamp * 1000);
-        //     timeStamps.push(this.timeConverter(date, "day"));
-        //   }
-        // }
+        if (this.chartMode == "Hour") {
+          if (
+            this.meterData[Object.keys(this.meterData)[0]].lables.length > 1800
+          ) {
+            number = 1800;
+          } else
+            number = this.meterData[Object.keys(this.meterData)[0]].lables
+              .length;
 
-        // if (this.chartMode == "Week") {
-        //   if (this.$data.meterData.lables[0].length > 302400) {
-        //     number = 302400;
-        //   } else number = number = this.$data.meterData.lables[0].length;
-        //   for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-        //     Math.max(this.$data.meterData.lables[0].length - number, 0)
-        //   )) {
-        //     var date = new Date(unixTimeStamp * 1000);
-        //     timeStamps.push(this.timeConverter(date, "month"));
-        //   }
-        // }
+          for (let unixTimeStamp of this.meterData[
+            Object.keys(this.meterData)[0]
+          ].lables.slice(
+            Math.max(
+              this.meterData[Object.keys(this.meterData)[0]].lables.length -
+                number,
+              0
+            )
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "hour"));
+          }
+        }
 
-        // if (this.chartMode == "Month") {
-        //   if (this.$data.meterData.lables[0].length > 1296000) {
-        //     number = 1296000;
-        //   } else number = number = this.$data.meterData.lables[0].length;
-        //   for (let unixTimeStamp of this.$data.meterData.lables[0].slice(
-        //     Math.max(this.$data.meterData.lables[0].length - number, 0)
-        //   )) {
-        //     var date = new Date(unixTimeStamp * 1000);
-        //     timeStamps.push(this.timeConverter(date, "month"));
-        //   }
-        // }
+        if (this.chartMode == "Day") {
+          if (
+            this.meterData[Object.keys(this.meterData)[0]].lables.length > 43200
+          ) {
+            number = 43200;
+          } else
+            number = this.meterData[Object.keys(this.meterData)[0]].lables
+              .length;
+
+          for (let unixTimeStamp of this.meterData[
+            Object.keys(this.meterData)[0]
+          ].lables.slice(
+            Math.max(
+              this.meterData[Object.keys(this.meterData)[0]].lables.length -
+                number,
+              0
+            )
+          )) {
+            var date = new Date(unixTimeStamp * 1000);
+            timeStamps.push(this.timeConverter(date, "hour"));
+          }
+        }
 
         console.log("KEY POINT");
-        let keys = Object.keys(this.$data.meterData);
+        let keys = Object.keys(this.meterData);
         console.log(keys);
         let dataValues = { labels: timeStamps, datasets: [] };
         for (let i = 0; i < keys.length; i++) {
           console.log(this.meterData[keys[i]]);
           dataValues.datasets.push({
             label: keys[i] + " Power Consumption",
-            data: this.meterData[keys[i]].values[0].slice(
-              Math.max(this.meterData[keys[i]].values[0].length - number, 0)
+            data: this.meterData[keys[i]].values.slice(
+              Math.max(this.meterData[keys[i]].values.length - number, 0)
             ),
             backgroundColor: this.backgroundColors[i],
             borderColor: this.borderColors[i],
@@ -294,8 +294,6 @@ export default {
         console.log("DATA");
         console.log(dataValues);
         return dataValues;
-
-        return "a";
       } catch (e) {
         console.log(e);
         return null;
