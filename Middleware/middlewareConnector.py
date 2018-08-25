@@ -37,9 +37,13 @@ if __name__ == '__main__':
         if startTime != 0:
             elapsedTime = endTime - startTime
             powerValue = lci.queryPower()
+            if powerValue<50:
+                powerValue=0
+            
             isConsuming = lci.isConsuming()
             if(meterProducerMode):
                 isConsuming = not isConsuming
+            
             energyValue = int(calcEnergy(powerValue, elapsedTime))
             if (isConsuming):
                 # if the wallet ballance would be set to <0, make the token balance zero else decrement tokens
@@ -52,7 +56,7 @@ if __name__ == '__main__':
                 bc.mintToken(int(energyValue))
                 dl.createEntry(-int(powerValue),bc.getBalance())
             if showDisplay:
-                display.addRow([powerValue,round(elapsedTime,5),round(energyValue,5),bc.getBalance()])
+                display.addRow([powerValue,round(elapsedTime,5),round(energyValue,5),bc.getBalance(),isConsuming])
                 display.displayTable()
         startTime = time.time()
         # toggle light state based on ballance
