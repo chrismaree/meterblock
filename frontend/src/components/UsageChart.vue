@@ -1,20 +1,20 @@
 <template>
   <div class="UsageChart">
-    <h1>Meter Usage</h1>  
+    <h1 class="center">Meter Usage</h1>  
+
+
     <el-button @click="findMeter" type="primary">Find Meter</el-button>
 
-        <el-radio-group v-model="chartMode">
+              <el-radio-group v-model="chartMode">
       <el-radio-button label="Minute"></el-radio-button>
       <el-radio-button label="Hour"></el-radio-button>
       <el-radio-button label="Day"></el-radio-button>
       <el-radio-button label="Week"></el-radio-button>
-      <el-radio-button label="Month"></el-radio-button>
     </el-radio-group>
     <div>
       <br>  
   </div>
 
-{{meterData}}
   <el-card class="box-card" shadow="always" >
     <Bar :options="chartOptions" :chart-data="datacollection" style="hight:800px !important"></Bar>
   </el-card>    
@@ -81,7 +81,7 @@ export default {
         .get(this.selectedMeter)
         .map()
         .on((value, time) => {
-          console.log(this.selectedMeter)
+          console.log(this.selectedMeter);
           this.$data.meterData.lables.push(time);
           this.$data.meterData.values.push(value.power);
           this.$data.meterData.tokens.push(value.tokens);

@@ -1,25 +1,34 @@
 <template>
   <div class="app">
-    <div class="nav center">
-      <el-row>
-        <el-col :span="8">
-          <el-button v-if="this.$store.state.isWalletUnlocked" type="success" @click="openEthereumModalSuccess" plain>Wallet Unlocked <i class="el-icon-circle-check"></i></el-button>
+<div class="center">
+<el-menu class="center" mode="horizontal">  
+<el-menu-item index="1">
+    <router-link to="/about">About</router-link>
+    </el-menu-item>
+
+<el-menu-item index="2">
+    <router-link to="/admin">Admin</router-link>
+    </el-menu-item>
+  
+  <el-menu-item index="3">
+    <router-link to="/metermanagement">Meter Management</router-link>
+    </el-menu-item>
+  
+<el-menu-item index="4">
+    <router-link to="/networkutilization">Network Utilization</router-link>
+    </el-menu-item>
+<el-menu-item index="5">
+<el-button v-if="this.$store.state.isWalletUnlocked" type="success" @click="openEthereumModalSuccess" plain>Wallet Unlocked <i class="el-icon-circle-check"></i></el-button>
           <el-button v-if="!this.$store.state.isWalletUnlocked" type="warning" @click="openEthereumModalWarning" plain>Wallet Locked <i class="el-icon-circle-close"></i></el-button>
-        </el-col>
-        <el-col :span="8">
-          <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> | 
-      <router-link to="/admin">Admin</router-link> | 
-      <router-link to="/metermanagement">Meter Management</router-link> | 
-      <router-link to="/networkutilization">Network Utilization</router-link>
-        </el-col>
-        <el-col :span="8">
-          <el-button v-if="this.$store.state.gunDBNetworkState" type="success" @click="openGunDBModalSuccess" plain>GunDB Connected <i class="el-icon-circle-check"></i></el-button>
+<el-button v-if="this.$store.state.gunDBNetworkState" type="success" @click="openGunDBModalSuccess" plain>GunDB Connected <i class="el-icon-circle-check"></i></el-button>
           <el-button v-if="!this.$store.state.gunDBNetworkState" type="warning" @click="openGunDBModalSuccess" plain>GunDB Connection Failed <i class="el-icon-circle-close"></i></el-button>
-        </el-col>
-      </el-row>
-    </div>
-    <router-view/>
+</el-menu-item>
+</el-menu>
+</div>
+<br>
+<el-card class="contentCard">
+<router-view/>    
+</el-card>
   </div>
 </template>
 
@@ -33,13 +42,13 @@ export default {
         "<br><strong>Network: </strong>" +
         this.$store.state.netIdString +
         "<br><strong>Unlocked: </strong>" +
-        this.$store.state.isWalletUnlocked
-        this.$alert(message, "Ethereum Blockchain Connected Correctly", {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: "OK",
-          type: "Success",
-          center: true
-        });
+        this.$store.state.isWalletUnlocked;
+      this.$alert(message, "Ethereum Blockchain Connected Correctly", {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: "OK",
+        type: "Success",
+        center: true
+      });
     },
 
     openEthereumModalWarning() {
@@ -49,24 +58,24 @@ export default {
         "<br><strong>Network: </strong>" +
         this.$store.state.netIdString +
         "<br><strong>Unlocked: </strong>" +
-        this.$store.state.isWalletUnlocked
-        this.$alert(message, "Ethereum Blockchain NOT Connected Correctly", {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: "OK",
-          type: "Success",
-          center: true
-        });
+        this.$store.state.isWalletUnlocked;
+      this.$alert(message, "Ethereum Blockchain NOT Connected Correctly", {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: "OK",
+        type: "Success",
+        center: true
+      });
     },
     openGunDBModalSuccess() {
       let message =
         "<strong>GunDB Server: </strong>" +
-        this.$store.state.gunDBNetworkAddress
-        this.$alert(message, "GunDB Connected Correctly", {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: "OK",
-          type: "Success",
-          center: true
-        });
+        this.$store.state.gunDBNetworkAddress;
+      this.$alert(message, "GunDB Connected Correctly", {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: "OK",
+        type: "Success",
+        center: true
+      });
     }
   }
 };
@@ -92,7 +101,11 @@ export default {
     }
   }
 }
-.center{
+.center {
   text-align: center;
+}
+.contentCard{
+      max-width: 1400px;
+      margin: auto;
 }
 </style>

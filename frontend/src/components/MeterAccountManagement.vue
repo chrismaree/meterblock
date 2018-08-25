@@ -1,7 +1,7 @@
 <template>
-  <div class="hello">
-    <h1> Meter Account Management </h1>
-<el-row>
+  <div class="meterAccountManagement center">
+    <h1 class="center"> Meter Account Management </h1>
+<el-row :gutter="20">
   <el-col :span="12">
 <p>Your web3 account has {{accountBalance/100000}} KraG Tokens.</p>
     <div v-if="selectedMeter!=''">
@@ -21,7 +21,8 @@
     <el-button type="primary" @click="withdrawTokensFromMeter" :disabled="meterBalance==0">Withdraw</el-button>
     </div>
     <div v-if="selectedMeter==''">
-        Please select a meter to view it's balance
+        <p>Please select a meter to view it's balance</p>
+        <br>
     </div>
   </el-col>
 </el-row>
@@ -53,12 +54,12 @@ export default {
   methods: {
     async loadTokensToMeter() {
       console.log(this.selectedMeter);
-      await transfer(this.selectedMeter, this.loadValue*100000);
+      await transfer(this.selectedMeter, this.loadValue * 100000);
     },
 
     async withdrawTokensFromMeter() {
-        await withdrawFromMeter(this.selectedMeter, this.withDrawValue*100000)
-    },
+      await withdrawFromMeter(this.selectedMeter, this.withDrawValue * 100000);
+    }
   },
   async mounted() {
     await loadKragToken();

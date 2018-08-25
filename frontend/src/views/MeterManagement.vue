@@ -1,6 +1,6 @@
 <template>
-  <div class="meterusage">
-  <h1>Meter Management</h1>
+  <div class="meterusage center">
+  <h1 class="center">Meter Management</h1>
   <p>You have {{numberOfMetersToOwner}} meters registered to your address</p>
     <div v-if="numberOfMetersToOwner>0">{{metersToOwner}}</div>
     <p>Select Meter to manage</p>
@@ -21,26 +21,26 @@ import {
   getMetersToOwner
 } from "../../utils/KraGTokenInterface";
 
-import UsageChart from '@/components/UsageChart.vue'
-import MeterAccountManagement from '@/components/MeterAccountManagement.vue'
+import UsageChart from "@/components/UsageChart.vue";
+import MeterAccountManagement from "@/components/MeterAccountManagement.vue";
 
 export default {
-  name: 'MeterManagement',
+  name: "MeterManagement",
   data() {
     return {
       metersToOwner: [],
       selectedMeter: "",
       numberOfMetersToOwner: 0
-    }
+    };
   },
   components: {
     UsageChart,
     MeterAccountManagement
   },
-  async mounted () {
-      await loadKragToken()
-      this.metersToOwner = await getMetersToOwner()
-      this.numberOfMetersToOwner = this.metersToOwner.length
-  }
+  async mounted() {
+    await loadKragToken();
+    this.metersToOwner = await getMetersToOwner();
+    this.numberOfMetersToOwner = this.metersToOwner.length;
 }
+};
 </script>

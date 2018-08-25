@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import About from './views/About.vue'
 import MeterManagement from './views/MeterManagement.vue'
 import Admin from './views/Admin.vue'
 import NetworkUtilization from './views/NetworkUtilization.vue'
@@ -11,7 +11,7 @@ export default new Router({
   routes: [{
       path: '/',
       name: 'home',
-      component: Home
+      component: About
     },
     {
       path: '/about',

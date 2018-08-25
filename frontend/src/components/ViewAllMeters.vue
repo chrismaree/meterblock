@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewAllMeters">
+  <div class="ViewAllMeters center">
     <h1>All Meters Graphs</h1>
 
          <div class="sub-title">Select Meters to add</div>
@@ -18,17 +18,7 @@
             :type="tag.type"
               @close="handleClose(tag)">
             {{tag.name}}
-        </el-tag>
-        <br>
-        <!-- {{meterData}} -->
-        <br>
-        <br>
-        <!-- {{datacollection}} -->
-        <br>
-        <br>
-    
-        <!-- {{meterData[Object.keys(this.meterData)[0]]}} -->
-        
+        </el-tag> 
         <br>
         <el-radio-group v-model="chartMode">
         <el-radio-button label="Minute"></el-radio-button>
@@ -121,12 +111,12 @@ export default {
       let lables = [];
       let values = [];
       let tokens = [];
-      this.$gun.get(_meterAddress).put(null)
+      this.$gun.get(_meterAddress).put(null);
       this.$gun
         .get(_meterAddress)
         .map()
         .on((value, time) => {
-          console.log(value +time)
+          console.log(value + time);
           this.count = this.count + 1;
           if (this.meterData[_meterAddress] == undefined) {
             this.meterData[_meterAddress] = {
@@ -135,7 +125,9 @@ export default {
               tokens: []
             };
           }
-          this.meterData[_meterAddress].lables.push(time.substring(time.lastIndexOf("/") + 1));
+          this.meterData[_meterAddress].lables.push(
+            time.substring(time.lastIndexOf("/") + 1)
+          );
           this.meterData[_meterAddress].values.push(value.power);
           this.meterData[_meterAddress].tokens.push(value.tokens);
         });
