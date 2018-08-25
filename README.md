@@ -29,8 +29,6 @@ economic impacts.
 
 meterblock's Full technology stack can be seen below.
 
-<p align="center">
-  ![](Images/Systemarchitecture-SystemOverview.png?raw=true)
-</p>
+![](Images/Systemarchitecture-SystemOverview.png?raw=true)
 
 
