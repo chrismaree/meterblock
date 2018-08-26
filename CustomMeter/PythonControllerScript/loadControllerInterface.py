@@ -1,6 +1,5 @@
 import LoadController as lc
 import LoadCalculationHelpers as lch
-import matplotlib.pyplot as plt
 from time import sleep
 
 standardQuerySize = 100
