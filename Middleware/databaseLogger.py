@@ -6,7 +6,7 @@ import blockchainConnector as bc
 import time
 import json
 
-ip = '10.0.0.206'
+ip = '192.168.0.2'
 url = "http://"+ip+":3000/"
 
 try:
