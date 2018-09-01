@@ -1,4 +1,4 @@
-module.exports = {
+﻿module.exports = {
     // See <http://truffleframework.com/docs/advanced/configuration>
     // for more about customizing your Truffle configuration!
     networks: {
@@ -9,7 +9,7 @@ module.exports = {
         },
         
         lan: {
-            host: "10.0.0.206",
+            host: "192.168.0.2",
             port: 8545,
             network_id: "*"
         },
