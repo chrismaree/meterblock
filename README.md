@@ -29,4 +29,8 @@ economic impacts.
 
 meterblock's Full technology stack can be seen below.
 
-![](Images/Systemarchitecture-SystemOverview.png?raw=true)
+<p align="center">
+  <img src="https://github.com/SoIidarity/meterblock/blob/master/Images/Systemarchitecture-SystemOverview.png?raw=true" alt="Sublime's custom image"/>
+</p>
+
+
