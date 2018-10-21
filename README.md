@@ -27,6 +27,8 @@ relate to the practicalities and complexities of implementation when considering
 national grid level, but can also be extended to the legal and regulatory factors and their broader
 economic impacts.
 
+A link to the final implemenation report can be found [here](https://github.com/SoIidarity/meterblock/blob/master/Documents/Final%20Report.pdf)
+
 ## meterblock's Full technology stack can be seen below.
 
 <p align="center">
