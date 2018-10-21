@@ -27,10 +27,13 @@ relate to the practicalities and complexities of implementation when considering
 national grid level, but can also be extended to the legal and regulatory factors and their broader
 economic impacts.
 
-meterblock's Full technology stack can be seen below.
+## meterblock's Full technology stack can be seen below.
 
 <p align="center">
   <img src="https://github.com/SoIidarity/meterblock/blob/master/Images/Systemarchitecture-SystemOverview.png?raw=true" alt="Sublime's custom image"/>
 </p>
 
-
+## System realization 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/SoIidarity/meterblock/master/Images/Testing%20Setup.jpg" alt="implementation"/>
+</p>
