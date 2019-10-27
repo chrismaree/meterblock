@@ -29,6 +29,7 @@ economic impacts.
 
 A link to the final implemenation report can be found [here](https://github.com/SoIidarity/meterblock/blob/master/Documents/Final%20Report.pdf)
 
+## Check out a demo of the implementation in the videos below! 📹
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/N4H9XTRg-ac/0.jpg)](https://www.youtube.com/watch?v=N4H9XTRg-ac)
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/1dpFzMbEzDI/0.jpg)](https://www.youtube.com/watch?v=1dpFzMbEzDI)
 
