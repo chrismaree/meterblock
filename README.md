@@ -29,9 +29,8 @@ economic impacts.
 
 A link to the final implemenation report can be found [here](https://github.com/SoIidarity/meterblock/blob/master/Documents/Final%20Report.pdf)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/N4H9XTRg-ac" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/1dpFzMbEzDI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/N4H9XTRg-ac/0.jpg)](https://www.youtube.com/watch?v=N4H9XTRg-ac)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/1dpFzMbEzDI/0.jpg)](https://www.youtube.com/watch?v=1dpFzMbEzDI)
 
 ## meterblock's Full technology stack can be seen below.
 
